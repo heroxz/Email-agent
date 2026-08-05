@@ -47,8 +47,6 @@ async def debug_callback(
     )
 
 async def debug_main():
-    #session = await create_session(callback=debug_callback)
-    print(settings.DeepSeek_api_key)
     print(settings.DeepSeek_base_url)
     async with create_session(callback=debug_callback) as session:
         try:

@@ -47,6 +47,7 @@ def build_prompt(intent: str, text: str, assist: str = '') -> str:
 
 async def generate_with_model(prompt: str, intent: str) -> str:
     api_key = os.getenv("DEEPSEEK_API_KEY") or getattr(settings, "DeepSeek_api_key", None)
+    print(f"Using API key: {'set' if api_key else 'not set'}")
     if not api_key:
         return ""
 
@@ -82,6 +83,7 @@ async def generate_with_model(prompt: str, intent: str) -> str:
 
     choices = body.get("choices", [])
     if not choices:
+        print(f"No choices returned from model for intent {intent}. Response body: {body}")
         return ""
 
     message = choices[0].get("message", {})
@@ -106,12 +108,15 @@ async def route_message(session: ClientSession, text: str) -> str:
     if response.content:
         first_content = response.content[0]
         response_content = getattr(first_content, "text", str(first_content))
-        assist = json.dumps(first_content.dict(), ensure_ascii=False, indent=2)
+        print(f'response_content={response_content}')
+        assist = response_content
     
     prompt = build_prompt(intent, text, assist=assist)
     model_reply = await generate_with_model(prompt, intent)
     if model_reply:
         return model_reply
+    else:
+        print(f"Failed to generate model reply for intent: {intent}")
 
     # response = await session.call_tool(
     #     intent,
