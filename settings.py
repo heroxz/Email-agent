@@ -8,7 +8,7 @@ class AppSettings(BaseSettings):
     # DeepSeek-v4-flash settings
     DeepSeek_api_key: str = Field(..., env='DEEPSEEK_API_KEY')
     DeepSeek_base_url: str = Field('https://api.deepseek.com', env='DEEPSEEK_BASE_URL')
-    DeepSeek_model: str = Field('DeepSeek-v4-flash', env='DEEPSEEK_MODEL')
+    DeepSeek_model: str = Field('deepseek-v4-flash', env='DEEPSEEK_MODEL')
 
     # Log level
     log_level: str = Field('INFO', env='LOG_LEVEL')
