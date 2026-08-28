@@ -47,7 +47,7 @@ pipeline {
         success {
             echo 'Build and tests completed successfully!'
         }
-        unsucessful {
+        unsuccessful {
             echo 'Build or tests failed. Please check the logs for details.'
         }
         always {
