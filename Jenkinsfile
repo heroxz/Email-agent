@@ -1,6 +1,9 @@
 
 pipeline {
     agent any
+    triggers {
+        githubpush()
+    }
     stages {
         stage('checkout') {
             steps {
