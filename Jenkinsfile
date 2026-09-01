@@ -1,4 +1,3 @@
-
 pipeline {
     agent any
     triggers {
@@ -23,11 +22,20 @@ pipeline {
             steps {
                 echo 'Building the project...'
                 sh '''
-                    if [ -f "requirements.txt" ]; then
+                    set -e
+        
+                    echo "Python version:"
+                    python3 --version
+        
+                    echo "Creating virtual environment..."
+                    python3 -m venv .venv
+        
+                    echo "Upgrading pip..."
+                    .venv/bin/python -m pip install --upgrade pip
+        
+                    if [ -f requirements.txt ]; then
                         echo "Installing dependencies from requirements.txt..."
-                        python3 -m pip install -r requirements.txt
-                    else
-                        echo "No requirements.txt found. Skipping dependency installation."
+                        .venv/bin/python -m pip install -r requirements.txt
                     fi
                 '''
             }
@@ -36,9 +44,10 @@ pipeline {
             steps {
                 echo 'Running tests...'
                 sh '''
+                    set -e
                     if [ -d "tests" ]; then
                         echo "Executing tests..."
-                        python3 -m pytest tests/
+                        .venv/bin/python3 -m pytest tests/
                     else
                         echo "No tests found. Skipping tests."
                     fi
@@ -59,4 +68,3 @@ pipeline {
         }
     }
 }
-
